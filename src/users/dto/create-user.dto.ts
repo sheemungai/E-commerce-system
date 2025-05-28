@@ -1,9 +1,8 @@
-import { IsString, IsEmail, IsDate } from 'class-validator';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { IsString, IsEmail, IsDateString, IsNotEmpty } from 'class-validator';
 export class CreateUserDto {
   @IsString()
-  user_id: string;
-
-  @IsString()
+  @IsNotEmpty()
   username: string;
 
   @IsEmail()
@@ -15,9 +14,9 @@ export class CreateUserDto {
   @IsString()
   role: string;
 
-  @IsDate()
+  @IsDateString()
   created_at: Date;
 
-  @IsDate()
+  @IsDateString()
   updated_at: Date;
 }

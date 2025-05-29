@@ -1,4 +1,9 @@
+import { IsNumber, IsEnum } from 'class-validator';
+
 export class CreatePaymentDto {
-  price: string;
-  product: string;
+  @IsNumber()
+  amount: number;
+
+  @IsEnum(['Credit Card', 'Paypal', 'Razorpay'])
+  payment_method: string;
 }

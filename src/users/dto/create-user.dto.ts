@@ -1,5 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsString, IsEmail, IsDateString, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsDateString,
+  IsNotEmpty,
+  IsEnum,
+} from 'class-validator';
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -11,8 +16,8 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
-  @IsString()
-  role: string;
+  @IsEnum(['Admin', 'User'], { message: 'Role must be Admin or User' })
+  role: 'Admin' | 'User';
 
   @IsDateString()
   created_at: Date;

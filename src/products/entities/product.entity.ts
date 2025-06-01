@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Orderitem } from 'src/orderitems/entities/orderitem.entity';
 
 @Entity()
 export class Product {
@@ -20,4 +21,7 @@ export class Product {
   created_at: Date;
   @Column()
   updated_at: Date;
+
+  @OneToMany(() => Orderitem, (orderitem) => orderitem.product)
+  orderitems: Orderitem[];
 }

@@ -5,6 +5,8 @@ import {
   IsNotEmpty,
   IsEnum,
 } from 'class-validator';
+import { UserRole } from '../enums/user-role.enum';
+
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -16,8 +18,8 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
-  @IsEnum(['Admin', 'User'], { message: 'Role must be Admin or User' })
-  role: 'Admin' | 'User';
+  @IsEnum(UserRole, { message: 'Role must be ADMIN or USER' })
+  role: UserRole;
 
   @IsDateString()
   created_at: Date;

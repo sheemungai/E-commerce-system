@@ -1,27 +1,26 @@
-@url = http://localhost:3000
+@url = http://localhost:8000
  
 // Method: GET
 
 #  GET {{url}}/users
 
 
-// Method: POST
+### // Method: POST
 
-UPDATE {{url}}/users
+POST {{url}}/users
 Content-Type: application/json
 
 {
-    "id": 1,
+  
   "username": "John Doe",
   "email": "john.doe@example.com",
   "password": "123John",
-  "role": "admin",
-  "createdAt": "2023-10-01T12:00:00Z",
-  "updatedAt": "2023-10-01T12:00:00Z"
+  "role": "ADMIN",
+  "created_at": "2025-06-04T18:16:26.377Z",
+  "updated_at": "2025-06-04T18:16:26.377Z"
 }
 
-
-// caching example
+### Caching Example
 POST {{url}}/Cache
 Content-Type: application/json
 {

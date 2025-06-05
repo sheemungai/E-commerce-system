@@ -14,6 +14,9 @@ import { CacheableMemory } from 'cacheable';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AppService } from './app.service';
+import { CategoriesModule } from './categories/categories.module';
+// import { AuthorizationModule } from './authorization/authorization.module';
+import { LogsModule } from './logs/logs.module';
 
 @Module({
   imports: [
@@ -44,6 +47,9 @@ import { AppService } from './app.service';
         };
       },
     }),
+    CategoriesModule,
+    // AuthorizationModule,
+    LogsModule,
   ],
   controllers: [AppController],
   providers: [

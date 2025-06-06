@@ -7,7 +7,6 @@ import { ProductsModule } from './products/products.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { OrderitemsModule } from './orderitems/orderitems.module';
-// import { SeedsModule } from './seeds/seeds.module';
 import { ConfigService } from '@nestjs/config';
 import { createKeyv, Keyv } from '@keyv/redis';
 import { CacheableMemory } from 'cacheable';
@@ -17,6 +16,7 @@ import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
 // import { AuthorizationModule } from './authorization/authorization.module';
 import { LogsModule } from './logs/logs.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -50,6 +50,7 @@ import { LogsModule } from './logs/logs.module';
     CategoriesModule,
     // AuthorizationModule,
     LogsModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [

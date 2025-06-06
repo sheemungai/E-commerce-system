@@ -4,10 +4,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Orderitem } from 'src/orderitems/entities/orderitem.entity';
 import { OrderStatus } from '../enums/order-status.enum';
+import { Payment } from 'src/payments/entities/payment.entity';
 
 @Entity()
 export class Order {
@@ -28,9 +30,14 @@ export class Order {
   @Column()
   updated_at: Date;
 
+  // Relationships
+
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
   @OneToMany(() => Orderitem, (orderitem) => orderitem.order)
   orderitems: Orderitem[];
+
+  @OneToOne(() => Payment, (payment) => payment.Order)
+  payment: Payment;
 }

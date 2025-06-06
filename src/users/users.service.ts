@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { create } from 'node:domain';
 
 @Injectable()
 export class UsersService {

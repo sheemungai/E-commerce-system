@@ -32,11 +32,17 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(id, updateUserDto);
+    const update = await this.usersService.update(id, updateUserDto);
+
+    return {
+      success: true,
+      message: `User with ID ${id} updated successfully`,
+      data: update,
+    };
   }
 
   @Delete(':id')

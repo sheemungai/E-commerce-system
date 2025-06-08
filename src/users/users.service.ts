@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import * as Bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -15,19 +16,54 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = this.userRepository.create(createUserDto);
-    return await this.userRepository.save(user);
+  // hashing password(helper function)
+  private async hashData(data: string): Promise<string> {
+    const salts = await Bcrypt.genSalt(10);
+    return Bcrypt.hash(data, salts);
   }
-  async findAll(name?: string): Promise<User[] | User> {
-    if (name) {
-      return await this.userRepository.find({
+  // helper function to compare password and remove it from the response
+  private excludePassword(user: User): Partial<User> {
+    const { password, hashedRefreshToken, ...rest } = user;
+    return rest;
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<Partial<User>> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+      select: ['user_id'],
+    });
+
+    if (existingUser) {
+      throw new Error(`User with email ${createUserDto.email} already exists`);
+    }
+    const newUser: Partial<User> = {
+      username: createUserDto.username,
+      email: createUserDto.email,
+      role: createUserDto.role,
+      password: await this.hashData(createUserDto.password),
+    };
+
+    const savedUser = await this.userRepository.save(newUser);
+
+    return this.excludePassword(savedUser);
+  }
+
+  async findAll(email?: string) {
+    let users: User[];
+    if (email) {
+      users = await this.userRepository.find({
+        where: {
+          email: email,
+        },
+        relations: ['orders'],
+      });
+    } else {
+      users = await this.userRepository.find({
         relations: ['orders'],
       });
     }
-    return await this.userRepository.find({
-      relations: ['orders'],
-    });
+
+    return users.map((user) => this.excludePassword(user));
   }
 
   async findOne(id: number): Promise<User | string> {

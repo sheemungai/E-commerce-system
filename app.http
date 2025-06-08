@@ -1,33 +1,40 @@
 @url = http://localhost:8000
- 
-POST {{url}}/seed
+@accessToken =
+@refreshToken =
+### login a user
+POST {{url}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "brian_doe@example.com",
+  "password": "securepassword123"
+}
+
+###Get user// log out
+GET {{url}}/auth/signout/2
+
+### refresh token
+GET {{url}}/auth/refresh?id=2
+Authorization: Bearer {{refreshToken}}
 
 ### // Get all users
-###
 GET {{url}}/users
+Accept: application/json
+Content-Type: application/json
 
 ### // Method: POST
 POST {{url}}/users
 Content-Type: application/json
 
 {
-  "username": "Brian Doe",
-  "email": "brian.doe@example.com",
-  "password": "123Brian",
-  "role": "ADMIN",
-  "created_at": "2025-06-04T18:16:26.377Z",
-  "updated_at": "2025-06-04T18:16:26.377Z"
+  "username": "Brian_doe",
+  "email": "brian_doe@example.com",
+  "password": "securepassword123",
+  "role": "USER",
+  "created_at": "2025-01-02T00:00:00Z",
+  "updated_at": "2025-01-02T00:00:00Z"
 }
 
 
 
-### // Partial update user
-PATCH {{url}}/users/18
-Content-Type: application/json
 
-{
-  "username": "Jane Doe Modified"
-}
-
-### // Delete user
-DELETE {{url}}/users/14

@@ -8,8 +8,10 @@ export class User {
   user_id: number;
   @Column()
   username: string;
+
   @Column()
   email: string;
+
   @Column()
   password: string;
 
@@ -19,6 +21,9 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @Column({ type: 'text', nullable: true, default: null })
+  hashedRefreshToken: string | null;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { PaymentsModule } from './payments/payments.module';
 import { OrdersModule } from './orders/orders.module';
@@ -17,6 +17,10 @@ import { CategoriesModule } from './categories/categories.module';
 // import { AuthorizationModule } from './authorization/authorization.module';
 import { LogsModule } from './logs/logs.module';
 import { SeedModule } from './seed/seed.module';
+import { AuthModule } from './auth/auth.module';
+import { AtGuard } from './auth/guards';
+
+import { LoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [
@@ -51,14 +55,33 @@ import { SeedModule } from './seed/seed.module';
     // AuthorizationModule,
     LogsModule,
     SeedModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: 'APP_INTERCEPTOR',
-      useClass: CacheInterceptor,
+      useClass: CacheInterceptor, // global guard for access token for alll routes
+    },
+    {
+      provide: 'APP_GUARD',
+      //global guard for access token for all routes
+      useClass: AtGuard,
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes(
+        'users',
+        'products',
+        'categories',
+        'orders',
+        'orderitems',
+        'payment',
+      );
+  }
+}

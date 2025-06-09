@@ -1,39 +1,72 @@
 @url = http://localhost:8000
-@accessToken =
-@refreshToken =
+# @accessToken =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiZmFpdGhfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDgyNDU1LCJleHAiOjE3NDk0ODMzNTV9.WVaZhdmeFhyOVwchLIbmL7auijk1VkyoWfB9KVG9eec
+@refreshToken =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiZmFpdGhfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDgyNDU1LCJleHAiOjE3NTAwODcyNTV9.
+# @admin_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiZmFpdGhfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDgyNDU1LCJleHAiOjE3NDk0ODMzNTV9.WVaZhdmeFhyOVwchLIbmL7auijk1VkyoWfB9KVG9eec
+
+### //  CREATE NEW ADMIN USER
+POST {{url}}/users
+Content-Type: application/json
+
+{
+  "username": "lina_well",
+  "email": "lina_doe@example.com",
+  "password": "securepassword100",
+  "role": "ADMIN",
+  "created_at": "2025-01-03T00:00:00Z",
+  "updated_at": "2025-01-03T00:00:00Z"
+}
+
 ### login a user
 POST {{url}}/auth/signin
 Content-Type: application/json
 
 {
-  "email": "brian_doe@example.com",
-  "password": "securepassword123"
+  "email": "lina_doe@example.com",
+  "password": "securepassword100"
+}
+
+### RBAC
+### CREATE NEW USER
+POST {{url}}/users
+content-Type: application/json
+
+{
+  "username": "will_smith",
+  "email": "will_smith@example.com",
+  "password": "securepassword111",
+  "role": "USER",
+  "created_at": "2025-01-03T00:00:00Z",
+  "updated_at": "2025-01-04T00:00:00Z"
+}
+
+### get users
+POST {{url}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "will_smith@example.com",
+  "password": "securepassword111"
 }
 
 ###Get user// log out
 GET {{url}}/auth/signout/2
 
 ### refresh token
-GET {{url}}/auth/refresh?id=2
+GET {{url}}/auth/refresh?id=9
 Authorization: Bearer {{refreshToken}}
 
-### // Get all users
-GET {{url}}/users
-Accept: application/json
-Content-Type: application/json
+### token access
+@admin_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjExLCJlbWFpbCI6ImxpbmFfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDg1NDkxLCJleHAiOjE3NDk0ODYzOTF9.flEVZVMPAdU7yTvnTCnKNAIZSob3APWDDwZz1IAXmtc
+@user_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTQ4NTUzMywiZXhwIjoxNzQ5NDg2NDMzfQ.F9exytziS8L9fTFNSJxdgP2_ijBQwMq11L64qCgWGC4
 
-### // Method: POST
-POST {{url}}/users
-Content-Type: application/json
 
-{
-  "username": "Brian_doe",
-  "email": "brian_doe@example.com",
-  "password": "securepassword123",
-  "role": "USER",
-  "created_at": "2025-01-02T00:00:00Z",
-  "updated_at": "2025-01-02T00:00:00Z"
-}
+###GET ALL USERS
+GET http://localhost:8000/users
+Authorization: Bearer {{user_token}}
+
+### get all users as an admin
+GET http://localhost:8000/users
+Authorization: Bearer {{admin_token}}
 
 
 

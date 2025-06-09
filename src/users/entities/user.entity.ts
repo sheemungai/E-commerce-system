@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Order } from '../../orders/entities/order.entity';
-import { UserRole } from '../enums/user-role.enum';
+import { Role } from '../enums/user-role.enum';
 
 @Entity()
 export class User {
@@ -17,10 +17,10 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
+    enum: Role,
+    default: Role.USER,
   })
-  role: UserRole;
+  role: Role;
 
   @Column({ type: 'text', nullable: true, default: null })
   hashedRefreshToken: string | null;

@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { PaymentsModule } from './payments/payments.module';
 import { OrdersModule } from './orders/orders.module';
 import { UsersModule } from './users/users.module';
@@ -12,15 +11,15 @@ import { createKeyv, Keyv } from '@keyv/redis';
 import { CacheableMemory } from 'cacheable';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CacheModule } from '@nestjs/cache-manager';
-import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
-// import { AuthorizationModule } from './authorization/authorization.module';
 import { LogsModule } from './logs/logs.module';
 import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
-import { AtGuard } from './auth/guards';
+// import { AtGuard } from './auth/guards';
 
 import { LoggerMiddleware } from './logger.middleware';
+import { RolesGuard } from './auth/guards/roles.guard';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -34,7 +33,6 @@ import { LoggerMiddleware } from './logger.middleware';
     OrdersModule,
     PaymentsModule,
     OrderitemsModule,
-    // SeedsModule,
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -56,10 +54,10 @@ import { LoggerMiddleware } from './logger.middleware';
     LogsModule,
     SeedModule,
     AuthModule,
+    CaslModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: 'APP_INTERCEPTOR',
       useClass: CacheInterceptor, // global guard for access token for alll routes
@@ -67,7 +65,8 @@ import { LoggerMiddleware } from './logger.middleware';
     {
       provide: 'APP_GUARD',
       //global guard for access token for all routes
-      useClass: AtGuard,
+      // useClass: AtGuard,
+      useClass: RolesGuard,
     },
   ],
 })

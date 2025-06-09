@@ -15,10 +15,10 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  private async getTokens(user_id: number, email: string) {
+  private async getTokens(user_id: number, email: string, role: string) {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: user_id, email },
+        { sub: user_id, email: email, role: role },
         {
           secret: this.configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
           expiresIn: this.configService.getOrThrow<string>(
@@ -27,7 +27,7 @@ export class AuthService {
         },
       ),
       this.jwtService.signAsync(
-        { sub: user_id, email },
+        { sub: user_id, email: email, role: role },
         {
           secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
           expiresIn: this.configService.getOrThrow<string>(
@@ -57,7 +57,7 @@ export class AuthService {
     //check if the user exist
     const foundUser = await this.userRepository.findOne({
       where: { email: createAuthDto.email },
-      select: ['user_id', 'email', 'password'],
+      select: ['user_id', 'email', 'password', 'role'],
     });
     if (!foundUser) {
       throw new NotFoundException(
@@ -79,6 +79,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.getTokens(
       foundUser.user_id,
       foundUser.email,
+      foundUser.role,
     );
 
     await this.saveRefreshToken(foundUser.user_id, refreshToken);
@@ -91,7 +92,7 @@ export class AuthService {
     //find user
     const foundUser = this.userRepository.findOne({
       where: { user_id: user_id },
-      select: ['user_id', 'email', 'hashedRefreshToken'],
+      select: ['user_id', 'email', 'role', 'hashedRefreshToken'],
     });
     if (!foundUser) {
       throw new NotFoundException(`User with id ${user_id} not found`);
@@ -105,7 +106,7 @@ export class AuthService {
   async refreshTokens(user_id: number, refreshToken: string) {
     const foundUser = await this.userRepository.findOne({
       where: { user_id },
-      select: ['user_id', 'email', 'hashedRefreshToken'],
+      select: ['user_id', 'email', 'role', 'hashedRefreshToken'],
     });
 
     if (!foundUser) {
@@ -133,6 +134,7 @@ export class AuthService {
     const { accessToken, refreshToken: newRefreshToken } = await this.getTokens(
       foundUser.user_id,
       foundUser.email,
+      foundUser.role,
     );
 
     //update the refresh token in the database

@@ -5,7 +5,7 @@ import {
   IsEnum,
   IsDateString,
 } from 'class-validator';
-import { UserRole } from '../enums/user-role.enum';
+import { Role } from '../enums/user-role.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
@@ -32,20 +32,20 @@ export class CreateUserDto {
 
   @ApiProperty({ description: 'Role of the user', example: 'ADMIN' })
   @IsNotEmpty()
-  @IsEnum(UserRole, { message: 'Role must be ADMIN or USER' })
-  role: UserRole;
+  @IsEnum(Role, { message: 'Role must be ADMIN or USER' })
+  role: Role;
 
   @ApiProperty({
     description: 'Creation date of the user',
     example: '2023-01-01T00:00:00Z',
   })
   @IsDateString()
-  created_at: Date;
+  created_at: string;
 
   @ApiProperty({
     description: 'Last update date of the user',
     example: '2023-01-01T00:00:00Z',
   })
   @IsDateString()
-  Updated_at: Date;
+  updated_at: string;
 }

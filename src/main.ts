@@ -5,14 +5,19 @@ import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost } from '@nestjs/core';
 import { AllExceptionsFilter } from './http-exception.filters';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+//import helmet from 'helmet';
 
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe());
 
+    //helmet configuration
+    // app.use(helmet());
+
     const configService = app.get(ConfigService);
     const PORT = configService.getOrThrow<number>('PORT');
+
     //swagger configuration
     const config = new DocumentBuilder()
       .setTitle('E-commerce API')

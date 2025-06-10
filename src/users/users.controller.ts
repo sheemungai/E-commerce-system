@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Req,
+  UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,6 +17,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators';
 import { Role } from './enums/user-role.enum';
+import { User } from './entities/user.entity';
+
+
+interface RequestWithUser extends Request {
+  user: User;
+}
 
 @Controller('users')
 export class UsersController {
@@ -31,10 +40,17 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+ 
   @Roles(Role.ADMIN, Role.USER)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number, @Req() req: RequestWithUser) {
+    const user = req.user;
+    if (user.user_id === id || user.role === Role.ADMIN) {
+      return this.usersService.findOne(id);
+    }
+    throw new ForbiddenException(
+      'You do not have permission to access this resource.',
+    );
   }
 
   @Roles(Role.USER, Role.ADMIN)
@@ -52,9 +68,15 @@ export class UsersController {
     };
   }
 
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Delete, 'User'))
   @Roles(Role.ADMIN)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number, @Req() req: RequestWithUser) {
+    const user = req.user;
+    if (user.role === Role.ADMIN) {
+      return this.usersService.remove(id);
+    }
+    throw new ForbiddenException('Unauthorized to delete users');
   }
 }

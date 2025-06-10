@@ -12,8 +12,8 @@ export class CreateOrderDto {
 
   @ApiProperty({ description: 'Status of the order', example: 'Pending' })
   @IsString()
-  @IsEnum(['Pending', 'Shipped', 'Delivered', 'Cancelled'])
-  status: 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
+  @IsEnum(['PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED'])
+  status: 'PENDING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
 
   @ApiProperty({
     description: 'Creation date of the order',

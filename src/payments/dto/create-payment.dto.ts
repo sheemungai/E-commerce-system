@@ -1,4 +1,4 @@
-import { IsNumber, IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsNumber, IsDateString, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePaymentDto {
@@ -24,7 +24,7 @@ export class CreatePaymentDto {
 
   @ApiProperty({ description: 'Payment date', example: '2023-01-01T00:00:00Z' })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   paid_at: Date;
 
   @ApiProperty({
@@ -32,7 +32,7 @@ export class CreatePaymentDto {
     example: '2023-01-01T00:00:00Z',
   })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   created_at: Date;
 
   @ApiProperty({
@@ -40,6 +40,6 @@ export class CreatePaymentDto {
     example: '2023-01-01T00:00:00Z',
   })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   updated_at: Date;
 }

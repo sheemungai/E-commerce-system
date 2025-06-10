@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +7,7 @@ import { Repository } from 'typeorm';
 import * as Bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Role } from 'src/users/enums/user-role.enum';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +17,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  private async getTokens(user_id: number, email: string, role: string) {
+  private async getTokens(user_id: number, email: string, role: Role) {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
         { sub: user_id, email: email, role: role },
@@ -85,7 +87,16 @@ export class AuthService {
     await this.saveRefreshToken(foundUser.user_id, refreshToken);
 
     //return tokens
-    return { accessToken, refreshToken };
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        username: foundUser?.username,
+        email: foundUser?.email,
+        password: foundUser?.password,
+        role: foundUser.role,
+      },
+    };
   }
 
   async signOut(user_id: number) {

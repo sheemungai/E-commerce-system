@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost } from '@nestjs/core';
 import { AllExceptionsFilter } from './http-exception.filters';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-//import helmet from 'helmet';
+import helmet from 'helmet';
 
 async function bootstrap() {
   try {
@@ -13,7 +13,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
 
     //helmet configuration
-    // app.use(helmet());
+    app.use(helmet());
 
     const configService = app.get(ConfigService);
     const PORT = configService.getOrThrow<number>('PORT');

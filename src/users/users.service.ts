@@ -6,6 +6,7 @@ import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as Bcrypt from 'bcrypt';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -22,10 +23,6 @@ export class UsersService {
     return Bcrypt.hash(data, salts);
   }
   // helper function to compare password and remove it from the response
-  private excludePassword(user: User): Partial<User> {
-    const { password, hashedRefreshToken, ...rest } = user;
-    return rest;
-  }
 
   async create(createUserDto: CreateUserDto): Promise<Partial<User>> {
     const existingUser = await this.userRepository.findOne({
@@ -44,8 +41,7 @@ export class UsersService {
     };
 
     const savedUser = await this.userRepository.save(newUser);
-
-    return this.excludePassword(savedUser);
+    return plainToInstance(User, savedUser);
   }
 
   async findAll(email?: string) {
@@ -63,26 +59,22 @@ export class UsersService {
       });
     }
 
-    return users.map((user) => this.excludePassword(user));
+    return users.map((user) => plainToInstance(User, user));
   }
 
-  async findOne(id: number): Promise<User | string> {
-    return await this.userRepository
-      .findOne({
-        where: { user_id: id },
-        relations: ['order'],
-      })
-      .then((user) => {
-        if (!user) {
-          return `No user found with id ${id}`;
-        }
-        return user;
-      })
-      .catch((error) => {
-        console.error('Error finding user:', error);
-        throw new Error(`Failed to find user with id ${id}`);
-      });
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { user_id: id },
+      relations: ['orders'],
+    });
+
+    if (!user) {
+      throw new Error(`Failed to find user with id ${id}`);
+    }
+
+    return plainToInstance(User, user);
   }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     return await this.userRepository
       .update(id, updateUserDto)

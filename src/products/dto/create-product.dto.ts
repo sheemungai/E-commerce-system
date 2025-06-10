@@ -24,7 +24,7 @@ export class CreateProductDto {
     example: 'https://example.com/laptop.jpg',
   })
   @IsString()
-  image: string;
+  img: string;
 
   @ApiProperty({ description: 'Category ID of the product', example: 1 })
   @IsNumber()

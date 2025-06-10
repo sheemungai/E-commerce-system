@@ -1,9 +1,11 @@
 @url = http://localhost:8000
-# @accessToken =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiZmFpdGhfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDgyNDU1LCJleHAiOjE3NDk0ODMzNTV9.WVaZhdmeFhyOVwchLIbmL7auijk1VkyoWfB9KVG9eec
-@refreshToken =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiZmFpdGhfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDgyNDU1LCJleHAiOjE3NTAwODcyNTV9.
-# @admin_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiZmFpdGhfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDgyNDU1LCJleHAiOjE3NDk0ODMzNTV9.WVaZhdmeFhyOVwchLIbmL7auijk1VkyoWfB9KVG9eec
 
-### //  CREATE NEW ADMIN USER
+
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk1ODE0ODAsImV4cCI6MTc0OTc1NDI4MH0.R3PUsEYvp_zUeO_LMSf7x_-COyBf_Qp9cZByW1eOx5w
+@user_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTU4MTkzNCwiZXhwIjoxNzQ5NzU0NzM0fQ.4iPO3ZRSFTW7eOzo-DNgPK_Pp3Gp_fvE8q88TF4zIGs
+
+
+### //  CREATE NEW ADMIN 
 POST {{url}}/users
 Content-Type: application/json
 
@@ -16,13 +18,13 @@ Content-Type: application/json
   "updated_at": "2025-01-03T00:00:00Z"
 }
 
-### login a user
+### login a admin
 POST {{url}}/auth/signin
 Content-Type: application/json
 
 {
-  "email": "lina_doe@example.com",
-  "password": "securepassword100"
+  "email": "john_doe@example.com",
+  "password": "securepassword123"
 }
 
 ### RBAC
@@ -34,12 +36,12 @@ content-Type: application/json
   "username": "will_smith",
   "email": "will_smith@example.com",
   "password": "securepassword111",
-  "role": "USER",
+  "role": "ADMIN",
   "created_at": "2025-01-03T00:00:00Z",
   "updated_at": "2025-01-04T00:00:00Z"
 }
 
-### get users
+### get user token
 POST {{url}}/auth/signin
 Content-Type: application/json
 
@@ -51,23 +53,39 @@ Content-Type: application/json
 ###Get user// log out
 GET {{url}}/auth/signout/2
 
-### refresh token
-GET {{url}}/auth/refresh?id=9
-Authorization: Bearer {{refreshToken}}
+
 
 ### token access
-@admin_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjExLCJlbWFpbCI6ImxpbmFfZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzQ5NDg1NDkxLCJleHAiOjE3NDk0ODYzOTF9.flEVZVMPAdU7yTvnTCnKNAIZSob3APWDDwZz1IAXmtc
-@user_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTQ4NTUzMywiZXhwIjoxNzQ5NDg2NDMzfQ.F9exytziS8L9fTFNSJxdgP2_ijBQwMq11L64qCgWGC4
 
 
 ###GET ALL USERS
 GET http://localhost:8000/users
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{admin_token}}
 
 ### get all users as an admin
 GET http://localhost:8000/users
+Authorization: Bearer {{user_token}}
+
+#admin can get orders
+###
+GET http://localhost:8000/orders
+Authorization: Bearer {{admin_token}}
+###
+GET  http://localhost:8000/orders
+Authorization: Bearer {{user_token}}
+
+
+###
+DELETE http://localhost:8000/orders/6
 Authorization: Bearer {{admin_token}}
 
+###
+GET http://localhost:8000/products
+Authorization: Bearer {{admin_token}}
+
+###
+GET http://localhost:8000/products
+Authorization: Bearer {{user_token}}
 
 
 

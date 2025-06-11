@@ -23,7 +23,9 @@ export class OrdersService {
     });
 
     if (!user) {
-      throw new NotFoundException(`User with id ${createOrderDto.user_id} not found`);
+      throw new NotFoundException(
+        `User with id ${createOrderDto.user_id} not found`,
+      );
     }
 
     const order = this.orderRepository.create({
@@ -70,13 +72,17 @@ export class OrdersService {
       });
 
       if (!user) {
-        throw new NotFoundException(`User with id ${updateOrderDto.user_id} not found`);
+        throw new NotFoundException(
+          `User with id ${updateOrderDto.user_id} not found`,
+        );
       }
     }
 
     await this.orderRepository.update(id, {
       ...updateOrderDto,
-      status: updateOrderDto.status ? OrderStatus[updateOrderDto.status] : undefined,
+      status: updateOrderDto.status
+        ? OrderStatus[updateOrderDto.status]
+        : undefined,
       updated_at: new Date(),
     });
 

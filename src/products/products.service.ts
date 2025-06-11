@@ -21,7 +21,9 @@ export class ProductsService {
     });
 
     if (!category) {
-      throw new NotFoundException(`Category with id ${createProductDto.category_id} not found`);
+      throw new NotFoundException(
+        `Category with id ${createProductDto.category_id} not found`,
+      );
     }
 
     const product = this.productRepository.create({
@@ -67,7 +69,9 @@ export class ProductsService {
       });
 
       if (!category) {
-        throw new NotFoundException(`Category with id ${updateProductDto.category_id} not found`);
+        throw new NotFoundException(
+          `Category with id ${updateProductDto.category_id} not found`,
+        );
       }
     }
 

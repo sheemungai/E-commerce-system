@@ -15,6 +15,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { Public } from './decorators/public.decorator';
 import { AtGuard, RtGuard } from './guards';
 import { Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 interface RequestWithUser extends Request {
   user: {
@@ -24,6 +25,7 @@ interface RequestWithUser extends Request {
   };
 }
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

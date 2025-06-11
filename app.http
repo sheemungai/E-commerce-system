@@ -1,8 +1,8 @@
-@url = http://localhost:8000
+@url = http://localhost:8000/
 
 
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk1ODE0ODAsImV4cCI6MTc0OTc1NDI4MH0.R3PUsEYvp_zUeO_LMSf7x_-COyBf_Qp9cZByW1eOx5w
-@user_token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTU4MTkzNCwiZXhwIjoxNzQ5NzU0NzM0fQ.4iPO3ZRSFTW7eOzo-DNgPK_Pp3Gp_fvE8q88TF4zIGs
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk2MTM4MzUsImV4cCI6MTc0OTc4NjYzNX0._Tu2Ufr-rXHMhNgsqE2TqsCVv5fYj7A2dkoiFuZwl7g
+@user_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTYxNDM1MSwiZXhwIjoxNzQ5Nzg3MTUxfQ.fCmTWdWVrfumN3dqM7-czz8TycYANfLkO2kDS_rMTZc
 
 
 ### //  CREATE NEW ADMIN 
@@ -10,8 +10,8 @@ POST {{url}}/users
 Content-Type: application/json
 
 {
-  "username": "lina_well",
-  "email": "lina_doe@example.com",
+  "username": "john_doe",
+  "email": "john_doe@example.com",
   "password": "securepassword100",
   "role": "ADMIN",
   "created_at": "2025-01-03T00:00:00Z",
@@ -26,6 +26,7 @@ Content-Type: application/json
   "email": "john_doe@example.com",
   "password": "securepassword123"
 }
+
 
 ### RBAC
 ### CREATE NEW USER
@@ -59,32 +60,32 @@ GET {{url}}/auth/signout/2
 
 
 ###GET ALL USERS
-GET http://localhost:8000/users
+GET http://localhost:8000/api/v1/users
 Authorization: Bearer {{admin_token}}
 
-### get all users as an admin
-GET http://localhost:8000/users
+### get all users as user
+GET http://localhost:8000/api/v1/users
 Authorization: Bearer {{user_token}}
 
 #admin can get orders
 ###
-GET http://localhost:8000/orders
+GET http://localhost:8000/api/v1/orders
 Authorization: Bearer {{admin_token}}
 ###
-GET  http://localhost:8000/orders
+GET  http://localhost:8000/api/v1/orders
 Authorization: Bearer {{user_token}}
 
 
 ###
-DELETE http://localhost:8000/orders/6
+DELETE http://localhost:8000/api/v1/orders/6
 Authorization: Bearer {{admin_token}}
 
 ###
-GET http://localhost:8000/products
+GET http://localhost:8000/api/v1/products
 Authorization: Bearer {{admin_token}}
 
 ###
-GET http://localhost:8000/products
+GET http://localhost:8000/api/v1/products
 Authorization: Bearer {{user_token}}
 
 

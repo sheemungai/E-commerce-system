@@ -15,6 +15,16 @@ async function bootstrap() {
     //helmet configuration
     app.use(helmet());
 
+    // //cors cofiuguration
+    // app.enableCors({
+    //   origin: '*',
+    //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    //   allowedHeaders: 'Content-Type, Accept, Authorization, X-Requested-With',
+    //   credentials: true,
+    // });
+    //global prefix for API routes
+    app.setGlobalPrefix('api/v1');
+
     const configService = app.get(ConfigService);
     const PORT = configService.getOrThrow<number>('PORT');
 
@@ -25,11 +35,29 @@ async function bootstrap() {
       .setVersion('1.0')
       .addBearerAuth()
       .addTag('ecommerce')
+      .addTag('auth', 'Authentication endpoints')
+      .addTag('users', 'User management endpoints')
+      .addTag('products', 'Product management endpoints')
+      .addTag('orders', 'Order management endpoints')
+      .addTag('payments', 'Payment processing endpoints')
+      .addTag('categories', 'Product category management endpoints')
+      .addTag('orderitems', 'Order item management endpoints')
+      .addServer('http://localhost:8000/', 'Local development server')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document, {
       jsonDocumentUrl: '/api-json',
+      swaggerOptions: {
+        persistAuthorization: true,
+        tagSorter: 'alpha',
+        operationsSorter: 'alpha',
+        docExpansion: 'none',
+        filter: true,
+      },
+      customCss: `
+      swagger-ui .topbar { display: none; }`,
+      customSiteTitle: 'E-commerce API Documentation',
     });
 
     const { httpAdapter } = app.get(HttpAdapterHost);

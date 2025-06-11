@@ -16,7 +16,10 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators';
 import { Role } from './enums/user-role.enum';
 import { AtGuard, RolesGuard } from 'src/auth/guards';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
+@ApiBearerAuth()
 @UseGuards(AtGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
@@ -41,11 +44,11 @@ export class UsersController {
     try {
       return await this.usersService.findOne(id);
     } catch (error) {
-      throw new Error(error.message);
+      const err = error as Error;
+      throw new Error(err.message);
     }
   }
 
-  
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,

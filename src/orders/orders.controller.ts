@@ -14,8 +14,10 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { AtGuard, RolesGuard } from 'src/auth/guards';
 import { Role } from 'src/users/enums/user-role.enum';
 import { Roles } from 'src/auth/decorators';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('orders')
+@ApiBearerAuth()
 @UseGuards(AtGuard, RolesGuard)
 @Controller('orders')
 export class OrdersController {
@@ -39,13 +41,13 @@ export class OrdersController {
     return this.ordersService.findOne(+id);
   }
 
-  @Roles(Role.ADMIN,Role.USER)
+  @Roles(Role.ADMIN, Role.USER)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.ordersService.update(+id, updateOrderDto);
   }
 
-  @Roles( Role.ADMIN)
+  @Roles(Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ordersService.remove(+id);

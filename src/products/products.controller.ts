@@ -14,7 +14,10 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { AtGuard, RolesGuard } from 'src/auth/guards';
 import { Roles } from 'src/auth/decorators';
 import { Role } from 'src/users/enums/user-role.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('products')
+@ApiBearerAuth()
 @UseGuards(AtGuard, RolesGuard)
 @Controller('products')
 export class ProductsController {

@@ -1,4 +1,9 @@
-import { CanActivate, Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  Injectable,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
@@ -35,7 +40,9 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException('User not authenticated');
     }
 
-    const dbUser = await this.userRepository.findOne({ where: { user_id: user.sub } });
+    const dbUser = await this.userRepository.findOne({
+      where: { user_id: user.sub },
+    });
     if (!dbUser) {
       throw new UnauthorizedException('User not found');
     }

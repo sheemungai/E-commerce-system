@@ -14,13 +14,16 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { AtGuard, RolesGuard } from 'src/auth/guards';
 import { Roles } from 'src/auth/decorators';
 import { Role } from 'src/users/enums/user-role.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('payments')
+@ApiBearerAuth()
 @UseGuards(AtGuard, RolesGuard)
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Roles( Role.USER)
+  @Roles(Role.USER)
   @Post()
   create(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentsService.create(createPaymentDto);

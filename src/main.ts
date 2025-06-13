@@ -15,13 +15,13 @@ async function bootstrap() {
     //helmet configuration
     app.use(helmet());
 
-    // //cors cofiuguration
-    // app.enableCors({
-    //   origin: '*',
-    //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    //   allowedHeaders: 'Content-Type, Accept, Authorization, X-Requested-With',
-    //   credentials: true,
-    // });
+    //cors cofiuguration
+    app.enableCors({
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      allowedHeaders: 'Content-Type, Accept, Authorization, X-Requested-With',
+      credentials: true,
+    });
     //global prefix for API routes
     app.setGlobalPrefix('api/v1');
 
@@ -31,7 +31,47 @@ async function bootstrap() {
     //swagger configuration
     const config = new DocumentBuilder()
       .setTitle('E-commerce API')
-      .setDescription('API documentation for the E-commerce application')
+      .setDescription(
+        `
+
+The E-Commerce System allows users to browse products, add items to their cart, make purchases, and track their orders. Admins can manage products, orders, and users.
+
+## 🏫 Core Features
+
+This API provides endpoints for managing:
+
+1.**👤 User Management – Registration, login, profile updates, and order tracking
+
+2.**📦 Product – Browsing, filtering, and managing product listings
+
+3.**🛒  Orders –  order placement, and tracking
+
+4.**💳 Payments – Payment processing 
+
+
+
+## 🔐 Authentication
+
+This API uses **JWT Bearer tokens** for secure authentication. All protected endpoints require proper authorization.
+
+### Getting Started:
+
+1. **Login** using the \`POST /auth/signin\` endpoint
+2. **Include the token** in your requests:   \`\`\`   Authorization: Bearer <your-access-token>   \`\`\`
+3. **Refresh tokens** when needed using \`GET /auth/refresh\`
+
+## 👥 Roles & Permissions
+
+
+| **🔴 ADMIN** | Full system access ,Create, Read, Update, Delete all resources |
+| **⚪ USER** | Acccess products, categories and orders |
+
+## 📖 API Usage
+
+- **Base URL**: \`http://localhost:8000/api/v1\`
+
+    `,
+      )
       .setVersion('1.0')
       .addBearerAuth()
       .addTag('ecommerce')

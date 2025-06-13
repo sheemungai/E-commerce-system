@@ -1,7 +1,17 @@
-@url = http://localhost:8000/
+@url = http://localhost:8000/api/v1
 
+### Login as Admin to get fresh token
+POST {{url}}/auth/signin
+Content-Type: application/json
 
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk2MTM4MzUsImV4cCI6MTc0OTc4NjYzNX0._Tu2Ufr-rXHMhNgsqE2TqsCVv5fYj7A2dkoiFuZwl7g
+{
+  "email": "john_doe@example.com",
+  "password": "securepassword100"
+}
+
+### Store the token from the response above in this variable
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk3OTA0NDQsImV4cCI6MTc0OTk2MzI0NH0.JKpf6ywmmIcO49ty-VS2OQ1DBiHGtxaEZULSauXn5FI
+
 @user_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTYxNDM1MSwiZXhwIjoxNzQ5Nzg3MTUxfQ.fCmTWdWVrfumN3dqM7-czz8TycYANfLkO2kDS_rMTZc
 
 
@@ -30,7 +40,7 @@ Content-Type: application/json
 
 ### RBAC
 ### CREATE NEW USER
-POST {{url}}/users
+POST {{url}}/users/
 content-Type: application/json
 
 {
@@ -50,6 +60,46 @@ Content-Type: application/json
   "email": "will_smith@example.com",
   "password": "securepassword111"
 }
+
+
+### create users
+POST {{url}}/users
+Content-Type: application/json
+
+{
+"username": "david_brown",
+  "email": "david.b@example.com",
+  "password": "securepassword321",
+  "role": "USER",
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
+### posting categories
+POST {{url}}/categories
+Content-Type: application/json
+
+{
+   "category_name": "Accessories",
+  "description": "Tech accessories and peripherals including cases, chargers, and cables",
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
+
+### posting orders
+POST {{url}}/orders
+Content-Type: application/json
+
+{
+  "user_id": 2,
+  "product_id": 1,
+  "quantity": 2,
+  "status": "PENDING",
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
 
 ###Get user// log out
 GET {{url}}/auth/signout/2
@@ -77,7 +127,7 @@ Authorization: Bearer {{user_token}}
 
 
 ###
-DELETE http://localhost:8000/api/v1/orders/6
+DELETE http://localhost:8000/api/v1/orders
 Authorization: Bearer {{admin_token}}
 
 ###
@@ -87,6 +137,77 @@ Authorization: Bearer {{admin_token}}
 ###
 GET http://localhost:8000/api/v1/products
 Authorization: Bearer {{user_token}}
+
+### Create Products for Electronics Category
+POST {{url}}/products
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "name": "MacBook Pro 2024",
+  "description": "Latest MacBook Pro with M3 chip, 16GB RAM, 512GB SSD",
+  "price": 1999,
+  "img": "https://example.com/macbook-pro.jpg",
+  "category_id": 1,
+  "stock_quantity": 50,
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
+### Create Order 1 - Pending Order
+POST {{url}}/orders
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "user_id": 34,
+  "total_amount": 1999,
+  "status": "PENDING",
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
+### Create Order Item 1
+POST {{url}}/orderitems
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "order_id": 1,
+  "product_id": 1,
+  "quantity": 1,
+  "price": 1999
+}
+
+### Create Order 2 - Shipped Order
+POST {{url}}/orders
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "user_id": 37,
+  "total_amount": 349,
+  "status": "SHIPPED",
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
+### Create Payment for Order 1
+POST {{url}}/payments
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "order_id": 1,
+  "amount": 1999,
+  "payment_method": "CREDIT_CARD",
+  "payment_status": "COMPLETED",
+  "paid_at": "2024-03-15T00:00:00Z",
+  "created_at": "2024-03-15T00:00:00Z",
+  "updated_at": "2024-03-15T00:00:00Z"
+}
+
+
 
 
 

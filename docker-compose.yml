@@ -1,4 +1,3 @@
-
 services:
   e-commerce-management-db:
     image: postgres:15-alpine
@@ -6,8 +5,8 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: e-commerce-management-db
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: test
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     ports:
       - "5432:5432"
@@ -25,7 +24,6 @@ services:
   redis:
     image: redis:8.0-alpine
     container_name: redis-cache
-    restart: unless-stopped
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-your_secure_redis_password}
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-your_secure_redis_password}"]
@@ -52,9 +50,9 @@ services:
       - PORT=8000
       - DB_HOST=e-commerce-management-db
       - DB_PORT=5432
-      - DB_NAME=e-commerce-management-system-db
+      - DB_NAME=test
       - DB_USERNAME=postgres
-      - DB_PASSWORD=password
+      - DB_PASSWORD=12345
       - DB_SYNC=true
       - DB_LOGGING=true
       - REDIS_URL=redis://:${REDIS_PASSWORD:-your_secure_redis_password}@redis:6379
@@ -62,8 +60,8 @@ services:
       - JWT_ACCESS_EXPIRATION_TIME=${JWT_ACCESS_EXPIRATION_TIME:-15m}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-your_refresh_token_secret}
       - JWT_REFRESH_EXPIRATION_TIME=${JWT_REFRESH_EXPIRATION_TIME:-7d}
-      - THROTTLE_TTL=${THROTTLE_TTL:-6000}
-      - THROTTLE_LIMIT=${THROTTLE_LIMIT:-100}
+      - THROTTLE_TTL=${RATE_LIMIT_TTL:-6000}
+      - THROTTLE_LIMIT=${RATE_LIMIT_MAX:-100}
     depends_on:
         redis:
           condition: service_healthy
@@ -74,14 +72,14 @@ services:
     volumes:
       - .:/app
       - /app/node_modules      
-  volumes:
-  pgdata:
+volumes:
+   pgdata:
     name: e-commerce-management-system-pgdata
     driver: local
-  redis-data:
+   redis-data:
     name: e-commerce-management-system-redis-data
     driver: local
 
 networks: 
-  app-network:
-    driver: bridge   
+    app-network:
+      driver: bridge   

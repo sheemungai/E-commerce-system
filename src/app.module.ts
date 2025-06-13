@@ -13,10 +13,10 @@ import { AuthModule } from './auth/auth.module';
 
 import { LoggerMiddleware } from './logger.middleware';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { CacheableMemory } from 'cacheable';
-import { createKeyv, Keyv } from '@keyv/redis';
+import { ConfigModule } from '@nestjs/config';
+// import { CacheInterceptor } from '@nestjs/cache-manager';
+// import { CacheableMemory } from 'cacheable';
+// import { createKeyv, Keyv } from '@keyv/redis';
 
 // import { RolesGuard } from './auth/guards/roles.guard';
 
@@ -37,22 +37,22 @@ import { createKeyv, Keyv } from '@keyv/redis';
     LogsModule,
     SeedModule,
     AuthModule,
-    CacheModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      isGlobal: true,
-      useFactory: (configService: ConfigService) => {
-        return {
-          ttl: 60000, // 60 sec: Cache time-to-live
-          stores: [
-            new Keyv({
-              store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
-            }),
-            createKeyv(configService.getOrThrow<string>('REDIS_URL')),
-          ],
-        };
-      },
-    }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   isGlobal: true,
+    //   useFactory: (configService: ConfigService) => {
+    //     return {
+    //       ttl: 100000, // 60 sec: Cache time-to-live
+    //       stores: [
+    //         new Keyv({
+    //           store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
+    //         }),
+    //         createKeyv(configService.getOrThrow<string>('REDIS_URL')),
+    //       ],
+    //     };
+    //   },
+    // }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
@@ -62,10 +62,10 @@ import { createKeyv, Keyv } from '@keyv/redis';
   ],
   controllers: [],
   providers: [
-    {
-      provide: 'APP_INTERCEPTOR',
-      useClass: CacheInterceptor,
-    },
+    // {
+    //   provide: 'APP_INTERCEPTOR',
+    //   useClass: CacheInterceptor,
+    // },
     {
       provide: 'APP_GUARD',
       useClass: ThrottlerGuard,

@@ -27,10 +27,10 @@ export class Payment {
   @Column()
   paid_at: Date;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @OneToOne(() => Order, (order) => order.payment)

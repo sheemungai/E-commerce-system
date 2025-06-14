@@ -23,11 +23,14 @@ export class Product {
   img: string;
   @Column()
   category_id: number;
+
   @Column()
   stock_quantity: number;
-  @Column()
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
-  @Column()
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
   @OneToMany(() => Orderitem, (orderitem) => orderitem.product)

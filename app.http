@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Store the token from the response above in this variable
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk3OTA0NDQsImV4cCI6MTc0OTk2MzI0NH0.JKpf6ywmmIcO49ty-VS2OQ1DBiHGtxaEZULSauXn5FI
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9obl9kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk5MDQyODcsImV4cCI6MTc1MDA3NzA4N30.H0rdV_l7qfN274i3Px8QTL6mAt8bBmJjq6ecADl7MSE
 
 @user_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IndpbGxfc21pdGhAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc0OTYxNDM1MSwiZXhwIjoxNzQ5Nzg3MTUxfQ.fCmTWdWVrfumN3dqM7-czz8TycYANfLkO2kDS_rMTZc
 
@@ -110,7 +110,7 @@ GET {{url}}/auth/signout/2
 
 
 ###GET ALL USERS
-GET http://localhost:8000/api/v1/users
+GET http://localhost:8000/api/v1/users/2
 Authorization: Bearer {{admin_token}}
 
 ### get all users as user

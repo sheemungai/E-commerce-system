@@ -26,20 +26,4 @@ export class CreatePaymentDto {
   @IsNotEmpty()
   @IsDateString()
   paid_at: Date;
-
-  @ApiProperty({
-    description: 'Creation date of the payment',
-    example: '2023-01-01T00:00:00Z',
-  })
-  @IsNotEmpty()
-  @IsDateString()
-  created_at: Date;
-
-  @ApiProperty({
-    description: 'Last update date of the payment',
-    example: '2023-01-01T00:00:00Z',
-  })
-  @IsNotEmpty()
-  @IsDateString()
-  updated_at: Date;
 }

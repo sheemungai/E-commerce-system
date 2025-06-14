@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsEnum, IsDateString } from 'class-validator';
+import { IsString, IsNumber, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrderDto {
@@ -14,18 +14,4 @@ export class CreateOrderDto {
   @IsString()
   @IsEnum(['PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED'])
   status: 'PENDING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
-
-  @ApiProperty({
-    description: 'Creation date of the order',
-    example: '2023-01-01T00:00:00Z',
-  })
-  @IsDateString()
-  created_at: Date;
-
-  @ApiProperty({
-    description: 'Last update date of the order',
-    example: '2023-01-01T00:00:00Z',
-  })
-  @IsDateString()
-  updated_at: Date;
 }

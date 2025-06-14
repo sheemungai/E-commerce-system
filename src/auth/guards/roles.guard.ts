@@ -12,7 +12,7 @@ import { ROLES_KEY } from '../decorators';
 import { Role } from 'src/users/enums/user-role.enum';
 import { JWTPayLoad } from '../strategies/at.strategy';
 
-interface UserRequest extends Request {
+export interface UserRequest extends Request {
   user?: JWTPayLoad;
 }
 

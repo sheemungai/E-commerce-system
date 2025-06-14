@@ -64,12 +64,18 @@ export class UsersService {
     return users.map((user) => plainToInstance(User, user));
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, details: boolean = false) {
+    if (details) {
+      const user = await this.userRepository.findOne({
+        where: { user_id: id },
+        relations: ['orders'],
+      });
+      return plainToInstance(User, user);
+    }
+
     const user = await this.userRepository.findOne({
       where: { user_id: id },
-      relations: ['orders'],
     });
-
     if (!user) {
       throw new Error(`Failed to find user with id ${id}`);
     }

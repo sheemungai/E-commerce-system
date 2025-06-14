@@ -36,9 +36,11 @@ export class UsersService {
     const newUser: Partial<User> = {
       username: createUserDto.username,
       email: createUserDto.email,
-      role: createUserDto.role,
       password: await this.hashData(createUserDto.password),
     };
+    if (createUserDto.role) {
+      newUser.role = createUserDto.role;
+    }
 
     const savedUser = await this.userRepository.save(newUser);
     return plainToInstance(User, savedUser);

@@ -36,7 +36,7 @@ async function bootstrap() {
 
 The E-Commerce System allows users to browse products, add items to their cart, make purchases, and track their orders. Admins can manage products, orders, and users.
 
-## 🏫 Core Features
+## Core Features
 
 This API provides endpoints for managing:
 
@@ -48,27 +48,13 @@ This API provides endpoints for managing:
 
 4.**💳 Payments – Payment processing 
 
-
-
-## 🔐 Authentication
-
-This API uses **JWT Bearer tokens** for secure authentication. All protected endpoints require proper authorization.
-
-### Getting Started:
-
-1. **Login** using the \`POST /auth/signin\` endpoint
-2. **Include the token** in your requests:   \`\`\`   Authorization: Bearer <your-access-token>   \`\`\`
-3. **Refresh tokens** when needed using \`GET /auth/refresh\`
-
-## 👥 Roles & Permissions
+##  Roles & Permissions
 
 
 | **🔴 ADMIN** | Full system access ,Create, Read, Update, Delete all resources |
-| **⚪ USER** | Acccess products, categories and orders |
+| **⚪ USER** | Access products, categories and orders |
 
-## 📖 API Usage
 
-- **Base URL**: \`http://localhost:8000/api/v1\`
 
     `,
       )

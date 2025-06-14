@@ -14,30 +14,30 @@ services:
       - app-network
     volumes: 
       - pgdata:/var/lib/postgresql/data
+   
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+
   
   redis:
     image: redis:8.0-alpine
     container_name: redis-cache
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-your_secure_redis_password}
-    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-your_secure_redis_password}"]
+    
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/data
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-your_secure_redis_password}", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-your_secure_redis_password}", "ping"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
   nest-app:
     build:
       context: .
@@ -55,7 +55,7 @@ services:
       - DB_PASSWORD=12345
       - DB_SYNC=true
       - DB_LOGGING=true
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-your_secure_redis_password}@redis:6379
+      - REDIS_URL=redis://192.168.2.100:6379
       - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET:-your_access_token_secret}
       - JWT_ACCESS_EXPIRATION_TIME=${JWT_ACCESS_EXPIRATION_TIME:-15m}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-your_refresh_token_secret}

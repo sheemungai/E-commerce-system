@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
 import { Category } from 'src/categories/entities/category.entity';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ProductsService {
@@ -41,10 +42,16 @@ export class ProductsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, details: boolean = false) {
+    if (details) {
+      const product = await this.productRepository.findOne({
+        where: { product_id: id },
+        relations: ['category', 'orderitems'],
+      });
+      return plainToInstance(Product, product);
+    }
     const product = await this.productRepository.findOne({
       where: { product_id: id },
-      relations: ['category', 'orderitems'],
     });
 
     if (!product) {

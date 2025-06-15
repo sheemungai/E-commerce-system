@@ -54,7 +54,7 @@ export class ProductsController {
     @Query('details', new DefaultValuePipe(false), ParseBoolPipe)
     details?: boolean,
   ) {
-    return this.productsService.findOne(id), details;
+    return this.productsService.findOne(id, details);
   }
 
   @Roles(Role.ADMIN)
@@ -78,7 +78,7 @@ export class ProductsController {
     @UserD('role') token_role: Role,
   ) {
     if (token_id !== id && token_role !== Role.USER) {
-      throw new ForbiddenException('You are not authorized to patch producs');
+      throw new ForbiddenException('You are not authorized to delete producs');
     }
     return this.productsService.remove(+id);
   }

@@ -29,7 +29,7 @@ export class OrderitemsController {
     return this.orderitemsService.create(createOrderitemDto);
   }
 
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   @Get()
   findAll() {
     return this.orderitemsService.findAll();

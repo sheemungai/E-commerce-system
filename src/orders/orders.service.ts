@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
 import { OrderStatus } from './enums/order-status.enum';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class OrdersService {
@@ -44,12 +45,17 @@ export class OrdersService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, details: boolean = false) {
+    if (details) {
+      const order = await this.orderRepository.findOne({
+        where: { order_id: id },
+        relations: ['user', 'orderitems', 'payment'],
+      });
+      return plainToInstance(Order, order);
+    }
     const order = await this.orderRepository.findOne({
       where: { order_id: id },
-      relations: ['user', 'orderitems', 'payment'],
     });
-
     if (!order) {
       throw new NotFoundException(`Order with id ${id} not found`);
     }
